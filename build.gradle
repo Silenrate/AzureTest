@@ -5,7 +5,7 @@ plugins {
     id 'jacoco'
 }
 
-group = 'com.example'
+group = 'edu.eci.tacs'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '1.8'
 
@@ -19,11 +19,16 @@ dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
 }
 
+test {
+    useJUnitPlatform()
+    finalizedBy jacocoTestReport // report is always generated after tests run
+}
+
 jacocoTestReport {
+    dependsOn test
     reports {
+        html.enabled true
         xml.enabled true
-        csv.enabled false
-        html.destination file("${buildDir}/jacocoHtml")
     }
     afterEvaluate {
         getClassDirectories().setFrom(classDirectories.files.collect {
@@ -31,10 +36,4 @@ jacocoTestReport {
                                         '**/edu/eci/tacs/TACSApp**'])
         })
     }
-}
-
-
-test {
-    useJUnitPlatform()
-    finalizedBy jacocoTestReport // report is always generated after tests run
 }
