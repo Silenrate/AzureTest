@@ -1,7 +1,7 @@
-package tacs.services;
+package edu.eci.tacs.services;
 
 import org.springframework.stereotype.Service;
-import tacs.model.Greeting;
+import edu.eci.tacs.model.Greeting;
 
 import java.util.concurrent.atomic.AtomicLong;
 

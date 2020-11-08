@@ -1,4 +1,4 @@
-package tacs;
+package edu.eci.tacs;
 
 import org.junit.Test;
 

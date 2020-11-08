@@ -1,4 +1,4 @@
-package tacs.model;
+package edu.eci.tacs.model;
 
 public class Greeting {
 

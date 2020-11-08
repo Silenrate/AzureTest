@@ -1,4 +1,4 @@
-package tacs;
+package edu.eci.tacs;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

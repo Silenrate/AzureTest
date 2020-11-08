@@ -1,6 +1,6 @@
-package tacs.services;
+package edu.eci.tacs.services;
 
-import tacs.model.Greeting;
+import edu.eci.tacs.model.Greeting;
 
 public interface Services {
 
