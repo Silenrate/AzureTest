@@ -20,6 +20,11 @@ dependencies {
 }
 
 jacocoTestReport {
+    reports {
+        xml.enabled true
+        csv.enabled false
+        html.destination file("${buildDir}/jacocoHtml")
+    }
     afterEvaluate {
         getClassDirectories().setFrom(classDirectories.files.collect {
             fileTree(dir: it, exclude: ['**/edu/eci/tacs/model/**',
