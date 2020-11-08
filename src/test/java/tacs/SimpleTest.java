@@ -8,6 +8,6 @@ public class SimpleTest {
 
     @Test
     public void shouldAssert() {
-        assertTrue(true);
+        assertTrue(false);
     }
 }
