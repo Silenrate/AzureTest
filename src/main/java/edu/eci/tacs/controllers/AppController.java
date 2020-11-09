@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,6 +28,9 @@ public class AppController {
 
     @Autowired
     private UserDetailsService userDetailsService;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @GetMapping("users/{username}")
     public ResponseEntity<?> getUserByUserName(@PathVariable String username) {
@@ -67,15 +71,16 @@ public class AppController {
     }
 
     @PostMapping("/users")
-    public ResponseEntity<?> addUser(@RequestBody CreateUser user) {
-        services.addUser(new User(user.getUsername(), user.getPassword()));
+    public ResponseEntity<?> addUser(@RequestBody CreateUser createUser) {
+        User user = new User(createUser.getUsername(), createUser.getPassword());
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        services.addUser(user);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody CreateUser user) {
-        UserDetails userDetails = userDetailsService
-                .loadUserByUsername(user.getUsername());
+        UserDetails userDetails = userDetailsService.loadUserByUsername(user.getUsername());
         if (userDetails != null && new BCryptPasswordEncoder().matches(user.getPassword(), userDetails.getPassword())) {
             return new ResponseEntity<>(HttpStatus.OK);
         } else {
