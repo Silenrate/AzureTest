@@ -1,6 +1,6 @@
 package edu.eci.tacs.model;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import javax.persistence.*;
 import java.util.List;
@@ -24,7 +24,7 @@ public class User {
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "username")
-    @JsonManagedReference
+    @JsonBackReference
     private List<Food> foods = new CopyOnWriteArrayList<>();
 
     public User() {

@@ -7,6 +7,8 @@ import edu.eci.tacs.persistence.PersistenceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class ServicesImpl implements Services {
 
@@ -32,6 +34,15 @@ public class ServicesImpl implements Services {
     public void addFood(Food food, String username) throws ServiceException {
         try {
             persistence.addFood(food,username);
+        } catch (PersistenceException e) {
+            throw new ServiceException(e.getMessage());
+        }
+    }
+
+    @Override
+    public List<Food> getFoodsOfAUser(String username) throws ServiceException{
+        try {
+            return persistence.getFoodsOfAUser(username);
         } catch (PersistenceException e) {
             throw new ServiceException(e.getMessage());
         }

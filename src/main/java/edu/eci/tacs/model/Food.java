@@ -1,6 +1,6 @@
 package edu.eci.tacs.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
 import java.util.Objects;
@@ -19,7 +19,7 @@ public class Food {
 
     @ManyToOne
     @JoinColumn(name = "username")
-    @JsonBackReference
+    @JsonManagedReference
     private User username;
 
     public Food() {
@@ -45,12 +45,12 @@ public class Food {
         this.name = name;
     }
 
-    public User getUser() {
+    public User getUsername() {
         return username;
     }
 
-    public void setUser(User user) {
-        this.username = user;
+    public void setUsername(User username) {
+        this.username = username;
     }
 
     @Override

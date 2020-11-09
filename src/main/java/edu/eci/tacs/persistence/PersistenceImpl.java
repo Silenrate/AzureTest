@@ -6,6 +6,8 @@ import edu.eci.tacs.persistence.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class PersistenceImpl implements Persistence {
 
@@ -29,8 +31,14 @@ public class PersistenceImpl implements Persistence {
     @Override
     public void addFood(Food food, String username) throws PersistenceException {
         User user = getUser(username);
-        food.setUser(user);
+        food.setUsername(user);
         user.addFood(food);
         userRepository.save(user);
+    }
+
+    @Override
+    public List<Food> getFoodsOfAUser(String username) throws PersistenceException {
+        User user = getUser(username);
+        return user.getFoods();
     }
 }

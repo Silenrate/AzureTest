@@ -1,5 +1,6 @@
 package edu.eci.tacs.controllers;
 
+import edu.eci.tacs.controllers.dtos.CreateFood;
 import edu.eci.tacs.model.Food;
 import edu.eci.tacs.model.User;
 import edu.eci.tacs.services.ServiceException;
@@ -24,10 +25,19 @@ public class AppController {
         }
     }
 
-    @PostMapping("/foods")
-    public ResponseEntity<?> addFood(@RequestBody Food food, @RequestHeader("x-userName") String username) {
+    @GetMapping("foods/{username}")
+    public ResponseEntity<?> getFoodsOfAUser(@PathVariable String username) {
         try {
-            services.addFood(food, username);
+            return new ResponseEntity<>(services.getFoodsOfAUser(username), HttpStatus.ACCEPTED);
+        } catch (ServiceException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @PostMapping("/foods")
+    public ResponseEntity<?> addFood(@RequestBody CreateFood food, @RequestHeader("x-userName") String username) {
+        try {
+            services.addFood(new Food(food.getName()), username);
             return new ResponseEntity<>(HttpStatus.CREATED);
         } catch (ServiceException e) {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
