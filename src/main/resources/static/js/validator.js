@@ -7,8 +7,8 @@ var validatorModule = (function () {
     const url = "http://localhost:8080";
 
     function loadPage(){
-        var isLoggedIn = localStorage.getItem("isLog");
-        if(isLoggedIn==null || isLoggedIn==false){
+        var isLoggedIn = localStorage.getItem("x-userName");
+        if(isLoggedIn==null || isLoggedIn==""){
             window.location.href=url+"/login.html";
         }
     }

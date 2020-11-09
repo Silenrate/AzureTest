@@ -12,7 +12,7 @@ var loginModule = (function () {
         var loginRequest = {username: email, password: passw};
         apiclient().postLogin(loginRequest)
             .then(function(data, textStatus, request) {
-                localStorage.setItem("isLog",true);
+                localStorage.setItem("x-userName",email);
                 location.href = url+"/index.html";
             }).catch( (e) => {
                 Swal.fire({
