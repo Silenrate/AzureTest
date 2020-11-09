@@ -20,7 +20,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         User current = null;
         try {
             current = services.getUser(s);
-            System.out.println(current);
         } catch (ServiceException e) {
             throw new UsernameNotFoundException(e.getMessage());
         }

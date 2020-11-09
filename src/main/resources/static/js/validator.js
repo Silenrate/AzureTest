@@ -1,5 +1,3 @@
-var isLoggedIn = null;
-
 var validatorModule = (function () {
 
     /*
@@ -9,6 +7,7 @@ var validatorModule = (function () {
     const url = "http://localhost:8080";
 
     function loadPage(){
+        var isLoggedIn = localStorage.getItem("isLog");
         if(isLoggedIn==null || isLoggedIn==false){
             window.location.href=url+"/login.html";
         }
