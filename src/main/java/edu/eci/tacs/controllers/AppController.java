@@ -11,6 +11,9 @@ import edu.eci.tacs.services.Services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,6 +24,9 @@ public class AppController {
 
     @Autowired
     private Services services;
+
+    @Autowired
+    private UserDetailsService userDetailsService;
 
     @GetMapping("users/{username}")
     public ResponseEntity<?> getUserByUserName(@PathVariable String username) {
@@ -64,6 +70,17 @@ public class AppController {
     public ResponseEntity<?> addUser(@RequestBody CreateUser user) {
         services.addUser(new User(user.getUsername(), user.getPassword()));
         return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody CreateUser user) {
+        UserDetails userDetails = userDetailsService
+                .loadUserByUsername(user.getUsername());
+        if (userDetails != null && new BCryptPasswordEncoder().matches(user.getPassword(), userDetails.getPassword())) {
+            return new ResponseEntity<>(HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
     }
 
     @DeleteMapping("/foods/{foodId}")
