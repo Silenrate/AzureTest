@@ -1,5 +1,6 @@
 package edu.eci.tacs.controllers;
 
+import edu.eci.tacs.model.Food;
 import edu.eci.tacs.model.User;
 import edu.eci.tacs.services.ServiceException;
 import edu.eci.tacs.services.Services;
@@ -20,6 +21,16 @@ public class AppController {
             return new ResponseEntity<>(services.getUser(username), HttpStatus.ACCEPTED);
         } catch (ServiceException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @PostMapping("/foods")
+    public ResponseEntity<?> addFood(@RequestBody Food food, @RequestHeader("x-userName") String username) {
+        try {
+            services.addFood(food, username);
+            return new ResponseEntity<>(HttpStatus.CREATED);
+        } catch (ServiceException e) {
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
     }
 

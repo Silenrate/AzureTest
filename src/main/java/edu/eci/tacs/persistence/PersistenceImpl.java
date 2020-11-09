@@ -1,5 +1,6 @@
 package edu.eci.tacs.persistence;
 
+import edu.eci.tacs.model.Food;
 import edu.eci.tacs.model.User;
 import edu.eci.tacs.persistence.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,5 +24,13 @@ public class PersistenceImpl implements Persistence {
             throw new PersistenceException("No existe un usuario con el nombre " + username);
         }
         return user;
+    }
+
+    @Override
+    public void addFood(Food food, String username) throws PersistenceException {
+        User user = getUser(username);
+        food.setUser(user);
+        user.addFood(food);
+        userRepository.save(user);
     }
 }

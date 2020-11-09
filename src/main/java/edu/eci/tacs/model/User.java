@@ -1,7 +1,11 @@
 package edu.eci.tacs.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
+import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 @Entity
 @Table(name = "users")
@@ -17,6 +21,11 @@ public class User {
 
     @Column(name = "password", length = 255, unique = true)
     private String password;
+
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "username")
+    @JsonManagedReference
+    private List<Food> foods = new CopyOnWriteArrayList<>();
 
     public User() {
     }
@@ -48,6 +57,18 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public List<Food> getFoods() {
+        return foods;
+    }
+
+    public void setFoods(List<Food> foods) {
+        this.foods = foods;
+    }
+
+    public void addFood(Food food) {
+        foods.add(food);
     }
 
     @Override
