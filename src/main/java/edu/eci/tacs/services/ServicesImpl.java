@@ -47,4 +47,13 @@ public class ServicesImpl implements Services {
             throw new ServiceException(e.getMessage());
         }
     }
+
+    @Override
+    public void deleteFood(long foodId, String username) throws ServiceException {
+        try {
+            persistence.deleteFood(foodId,username);
+        } catch (PersistenceException e) {
+            throw new ServiceException(e.getMessage());
+        }
+    }
 }

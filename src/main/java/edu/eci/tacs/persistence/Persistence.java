@@ -13,4 +13,6 @@ public interface Persistence {
     void addFood(Food food, String username) throws PersistenceException;
 
     List<Food> getFoodsOfAUser(String username) throws PersistenceException;
+
+    void deleteFood(long foodId, String username) throws PersistenceException;
 }

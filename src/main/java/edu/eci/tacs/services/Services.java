@@ -14,4 +14,6 @@ public interface Services {
     void addFood(Food food, String username) throws ServiceException;
 
     List<Food> getFoodsOfAUser(String username) throws ServiceException;
+
+    void deleteFood(long foodId, String username) throws ServiceException;
 }

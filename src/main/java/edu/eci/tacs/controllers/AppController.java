@@ -66,5 +66,15 @@ public class AppController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
+    @DeleteMapping("/foods/{foodId}")
+    public ResponseEntity<?> deleteFood(@PathVariable long foodId, @RequestHeader("x-userName") String username) {
+        try {
+            services.deleteFood(foodId, username);
+            return new ResponseEntity<>(HttpStatus.ACCEPTED);
+        } catch (ServiceException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
 
 }
