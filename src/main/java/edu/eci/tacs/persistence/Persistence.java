@@ -4,4 +4,6 @@ import edu.eci.tacs.model.User;
 
 public interface Persistence {
     void addUser(User user);
+
+    User getUser(String username) throws PersistenceException;
 }

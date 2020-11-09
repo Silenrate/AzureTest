@@ -8,10 +8,14 @@ import java.util.Objects;
 public class User {
 
     @Id
+    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
+    @Column(name = "username", length = 255, nullable = false)
     private String username;
+
+    @Column(name = "password", length = 255, unique = true)
     private String password;
 
     public User() {

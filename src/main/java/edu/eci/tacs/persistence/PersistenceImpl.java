@@ -15,4 +15,13 @@ public class PersistenceImpl implements Persistence {
     public void addUser(User user) {
         userRepository.save(user);
     }
+
+    @Override
+    public User getUser(String username) throws PersistenceException {
+        User user = userRepository.getUserByUsername(username);
+        if (user == null) {
+            throw new PersistenceException("No existe un usuario con el nombre " + username);
+        }
+        return user;
+    }
 }
