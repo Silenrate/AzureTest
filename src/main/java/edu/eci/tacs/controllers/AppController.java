@@ -1,6 +1,9 @@
 package edu.eci.tacs.controllers;
 
 import edu.eci.tacs.controllers.dtos.CreateFood;
+import edu.eci.tacs.controllers.dtos.CreateUser;
+import edu.eci.tacs.controllers.dtos.GetFood;
+import edu.eci.tacs.controllers.dtos.GetUser;
 import edu.eci.tacs.model.Food;
 import edu.eci.tacs.model.User;
 import edu.eci.tacs.services.ServiceException;
@@ -9,6 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 @RestController
 public class AppController {
@@ -19,7 +25,8 @@ public class AppController {
     @GetMapping("users/{username}")
     public ResponseEntity<?> getUserByUserName(@PathVariable String username) {
         try {
-            return new ResponseEntity<>(services.getUser(username), HttpStatus.ACCEPTED);
+            User user = services.getUser(username);
+            return new ResponseEntity<>(new GetUser(user.getUsername(), user.getId()), HttpStatus.ACCEPTED);
         } catch (ServiceException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
@@ -28,7 +35,16 @@ public class AppController {
     @GetMapping("foods/{username}")
     public ResponseEntity<?> getFoodsOfAUser(@PathVariable String username) {
         try {
-            return new ResponseEntity<>(services.getFoodsOfAUser(username), HttpStatus.ACCEPTED);
+            GetUser getUser;
+            User user;
+            List<Food> foods = services.getFoodsOfAUser(username);
+            List<GetFood> getFoods = new CopyOnWriteArrayList<>();
+            for (Food food : foods) {
+                user = food.getUsername();
+                getUser = new GetUser(user.getUsername(), user.getId());
+                getFoods.add(new GetFood(food.getId(), food.getName(), getUser));
+            }
+            return new ResponseEntity<>(getFoods, HttpStatus.ACCEPTED);
         } catch (ServiceException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
@@ -45,8 +61,8 @@ public class AppController {
     }
 
     @PostMapping("/users")
-    public ResponseEntity<?> addUser(@RequestBody User user) {
-        services.addUser(user);
+    public ResponseEntity<?> addUser(@RequestBody CreateUser user) {
+        services.addUser(new User(user.getUsername(), user.getPassword()));
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
