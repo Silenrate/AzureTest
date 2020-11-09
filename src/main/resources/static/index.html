@@ -14,10 +14,14 @@
           rel="stylesheet">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
     <script type="text/javascript" src="js/validator.js"></script>
+    <script type="text/javascript" src="js/apiclient.js"></script>
     <script type="text/javascript" src="js/login.js"></script>
+    <script type="text/javascript" src="js/index.js"></script>
     <script>
         function loadapp(){
             validatorModule().loadPage();
+            indexModule().loadName();
+            indexModule().loadFoods();
         }
     </script>
 </head>
@@ -37,7 +41,7 @@
                     </div>
                     <div class="form-group">
                         <input type="text" name="new_name" id="new_name" placeholder="New Food" />
-                        <button id="createFood" type="button" class="btn btn-primary" onclick="loginModule().doLogin()" >Add Food</button>
+                        <button id="createFood" type="button" class="btn btn-primary" onclick="indexModule().postFood()" >Add Food</button>
                     </div>
                     <div class="row">
                         <div class="col" >

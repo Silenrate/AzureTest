@@ -26,8 +26,38 @@ var apiclient = (function () {
         return data;
     }
 
+    function postFood(food,username){
+        var data = $.ajax({
+            url: urlAPI+"/foods",
+            type: "POST",
+            data: JSON.stringify(food),
+            contentType: "application/json",
+            headers: {"x-userName" : username}
+        });
+        return data;
+    }
+
+    function getUser(email){
+        var data = $.ajax({
+            url: urlAPI+"/users/"+email,
+            type: "GET"
+        });
+        return data;
+    }
+
+    function getFoods(email){
+        var data = $.ajax({
+            url: urlAPI+"/foods/"+email,
+            type: "GET"
+        });
+        return data;
+    }
+
     return {
         postLogin:postLogin,
-        postUser:postUser
+        postUser:postUser,
+        postFood:postFood,
+        getUser:getUser,
+        getFoods:getFoods
     };
 });
