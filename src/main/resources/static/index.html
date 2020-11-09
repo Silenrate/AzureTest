@@ -6,9 +6,15 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <link rel="stylesheet" href="css/buttons.css">
+    <link rel="stylesheet" href="css/scroll.css">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="fonts/material-icon/css/material-design-iconic-font.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+          rel="stylesheet">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
     <script type="text/javascript" src="js/validator.js"></script>
+    <script type="text/javascript" src="js/login.js"></script>
     <script>
         function loadapp(){
             validatorModule().loadPage();
@@ -21,13 +27,15 @@
         <div class="col" >
             <div class="card" style="border-style: none; border-radius: 25px !important; box-shadow: 0px 0px 20px -7px rgba(0,0,0,0.75);">
                 <div class="card-body" style="font-family: 'Montserrat', sans-serif !important;">
+                    <div class="col col-md" style="text-align: right" >
+                        <button onclick = "loginModule().doLogout()" class="btn"><span class="material-icons" style="font-size: 36px;">exit_to_app </span></button>
+                    </div>
                     <div class="row" style="text-align: center">
                         <div class="col" >
                             <p class="h5" id="welcome"> </p>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="new_name"><i class="zmdi zmdi-account material-icons-name"></i></label>
                         <input type="text" name="new_name" id="new_name" placeholder="New Food" />
                         <button id="createFood" type="button" class="btn btn-primary" onclick="loginModule().doLogin()" >Add Food</button>
                     </div>

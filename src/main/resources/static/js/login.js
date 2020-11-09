@@ -23,7 +23,13 @@ var loginModule = (function () {
         });
     }
 
+    function doLogout(){
+        localStorage.clear();
+        window.location.href=url+"/login.html";
+    }
+
     return {
-        doLogin:doLogin
+        doLogin:doLogin,
+        doLogout:doLogout
     };
 });

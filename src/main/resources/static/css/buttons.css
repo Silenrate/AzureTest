@@ -1,0 +1,30 @@
+.btn-primary{
+    background-color: #c1332e !important;
+    border-color: #c1332e !important;
+}
+.btn-primary:hover{
+    background-color: #8c211c !important;
+    border-color: #8c211c !important;
+}
+
+.btn-primary:disabled{
+    background-color: #c1332e !important;
+    border-color: #c1332e !important;
+}
+.btn-primary:disabled:hover{
+    background-color: #8c211c !important;
+    border-color: #8c211c !important;
+}
+
+.swal2-styled.swal2-confirm{
+    background-color: #c1332e !important;
+    border-color: #c1332e !important;
+}
+
+.swal2-styled.swal2-cancel{
+    background-color: #d75a1e !important;
+    border-color: #d75a1e !important;
+}
+
+
+
