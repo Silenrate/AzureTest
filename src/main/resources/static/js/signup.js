@@ -2,9 +2,9 @@ var signupModule = (function () {
 
     /*
     LOCAL "http://localhost:8080
-    PRODUCCION https://foodapitacs.herokuapp.com/
+    PRODUCTION https://foodapitacs.herokuapp.com
     */
-    const url = "http://localhost:8080";
+    const url = "https://foodapitacs.herokuapp.com";
 
     function validate(firstName,password){
         var bool = true;

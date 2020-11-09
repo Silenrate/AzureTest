@@ -2,9 +2,9 @@ var apiclient = (function () {
 
     /*
     LOCAL "http://localhost:8080
-    PRODUCTION https://foodapitacs.herokuapp.com/
+    PRODUCTION https://foodapitacs.herokuapp.com
     */
-    const urlAPI = "http://localhost:8080";
+    const urlAPI = "https://foodapitacs.herokuapp.com";
 
     function postLogin(loginRequest){
         var data = $.ajax({
@@ -53,11 +53,22 @@ var apiclient = (function () {
         return data;
     }
 
+    function deleteFood(foodId,username){
+        var data = $.ajax({
+            url: urlAPI+"/foods/"+foodId,
+            type: "DELETE",
+            contentType: "application/json",
+            headers: {"x-userName" : username}
+        });
+        return data;
+    }
+
     return {
         postLogin:postLogin,
         postUser:postUser,
         postFood:postFood,
         getUser:getUser,
-        getFoods:getFoods
+        getFoods:getFoods,
+        deleteFood:deleteFood
     };
 });

@@ -2,9 +2,9 @@ var loginModule = (function () {
 
     /*
     LOCAL "http://localhost:8080
-    PRODUCTION https://foodapitacs.herokuapp.com/
+    PRODUCTION https://foodapitacs.herokuapp.com
     */
-    const url = "http://localhost:8080";
+    const url = "https://foodapitacs.herokuapp.com";
 
     function doLogin(){
         var email = $("#username").val();

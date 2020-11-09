@@ -2,27 +2,26 @@ var indexModule = (function () {
 
     /*
     LOCAL http://localhost:8080
-    PRODUCTION https://foodapitacs.herokuapp.com/
+    PRODUCTION https://foodapitacs.herokuapp.com
     */
-    const url = "http://localhost:8080";
+    const url = "https://foodapitacs.herokuapp.com";
 
     function loadData(data){
         if(data.length===0){
-            document.getElementById("table_footer").innerHTML = "No se encontraron clases";
+            document.getElementById("table_footer").innerHTML = "No se encontraron alimentos";
         } else {
             $("#table_class > tbody").empty();
                 data.map(function(c){
-                var onclick = "Delete";
+                var onclick = "indexModule().deleteFood("+c.id+")";
                 var stri="'"+onclick+"'";
                 $("#table_class > tbody").append(
                     "<tr>" +
                     "<td>" + c.name+ "</td>"+
-                    "<td>" + onclick + "</td>"+
+                    "<td><button type=\"button\" class=\"btn btn-primary\" onclick=" + stri + ">Delete</button></td>"+
                     "</tr>"
                 );
             });
         }
-        console.log(data);
     }
 
     function loadName(){
@@ -67,9 +66,24 @@ var indexModule = (function () {
         });
     }
 
+    function deleteFood(foodId){
+        var username = localStorage.getItem("x-userName");
+        apiclient().deleteFood(foodId,username)
+            .then(function(data, textStatus, request) {
+                location.reload();
+            }).catch( (e) => {
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: "Error al eliminar el alimento"
+            });
+        });
+    }
+
     return {
         loadName:loadName,
         postFood:postFood,
-        loadFoods:loadFoods
+        loadFoods:loadFoods,
+        deleteFood:deleteFood
     };
 });
