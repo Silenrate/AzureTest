@@ -1,10 +1,18 @@
 var signupModule = (function () {
 
     /*
-    LOCAL "http://localhost:8080
+    LOCAL http://localhost:8080
     PRODUCTION https://foodapitacs.herokuapp.com
     */
     const url = "https://foodapitacs.herokuapp.com";
+
+    function alertError(message){
+        Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: message
+        });
+    }
 
     function validate(firstName,password){
         var bool = true;
