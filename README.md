@@ -14,11 +14,11 @@
 
 ## Descripción
 
-## Diagrama de Casos de Uso
-
-![](diagrams/casosdeuso.png)
+  Food App es una aplicación para gestionar tu lista de mercado, de esta puedes registrar todo lo que quieras comprar desde tu celular.
 
 ## Casos de Uso
+
+![](diagrams/casosdeuso.png)
 
 ### Autenticarme en la Plataforma
 #### Descripción
