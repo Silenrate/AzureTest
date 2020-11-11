@@ -5,7 +5,11 @@
 
 ## Integrantes
 
-*   Daniel Felipe Walteros Trujillo
+  * Daniel Felipe Alfonso Bueno
+  * Steven Nikolai Bermudez Vega
+  * Juan Carlos Garcia Garzón
+  * Johann Sebastian Paez Campos
+  * Daniel Felipe Walteros Trujillo
 
 
 [![Deployed to Heroku](https://www.herokucdn.com/deploy/button.png)](https://foodapitacs.herokuapp.com/)
