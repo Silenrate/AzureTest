@@ -209,7 +209,7 @@ public class ControllerTests {
     }
 
     @Test
-    public void shouldNotDeleteOneFood() throws Exception {
+    public void shouldDeleteOneFood() throws Exception {
         String email = "usuarioF@gmail.com";
         CreateUser user = new CreateUser(email, "123");
         mvc.perform(
