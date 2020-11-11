@@ -28,6 +28,16 @@ public class ServicesTests {
     private Services services;
 
     @Test
+    public void shouldNotCreateANullUser() {
+        try {
+            services.addUser(null);
+            fail("Debió fallar al agregar un usuario nulo");
+        } catch (ServiceException e) {
+            assertEquals("El usuario no puede ser nulo", e.getMessage());
+        }
+    }
+
+    @Test
     public void shouldNotCreateAnUserWithARepeatedUsername() {
         String email = "clienteA@gmail.com";
         User user = new User(email, "123");
@@ -41,6 +51,16 @@ public class ServicesTests {
             fail("Debió fallar al agregar este usuario");
         } catch (ServiceException e) {
             assertEquals("Ya existe un usuario con el nombre " + email, e.getMessage());
+        }
+    }
+
+    @Test
+    public void shouldNotGetAUserWithNullUsername() {
+        try {
+            services.getUser(null);
+            fail("Debió fallar al consultar el usuario nulo");
+        } catch (ServiceException e) {
+            assertEquals(ServiceException.NULL_USERNAME, e.getMessage());
         }
     }
 
@@ -82,6 +102,28 @@ public class ServicesTests {
     }
 
     @Test
+    public void shouldNotAddANullFood() {
+        String email = "noexiste@gmail.com";
+        try {
+            services.addFood(null, email);
+            fail("Debió fallar al agregar el alimento nulo");
+        } catch (ServiceException e) {
+            assertEquals("El alimento no puede ser nulo", e.getMessage());
+        }
+    }
+
+    @Test
+    public void shouldNotAddAFoodToAUserWithNullEmail() {
+        Food food = new Food("Pizza");
+        try {
+            services.addFood(food, null);
+            fail("Debió fallar al agregar el alimento a un usuario con nombre nulo");
+        } catch (ServiceException e) {
+            assertEquals(ServiceException.NULL_USERNAME, e.getMessage());
+        }
+    }
+
+    @Test
     public void shouldNotGetTheFoodsOfANonExistingUser() {
         String email = "noexiste@gmail.com";
         try {
@@ -89,6 +131,16 @@ public class ServicesTests {
             fail("Debió fallar al consultar los alimentos de un usuario que no existe");
         } catch (ServiceException e) {
             assertEquals("No existe un usuario con el nombre " + email, e.getMessage());
+        }
+    }
+
+    @Test
+    public void shouldNotGetTheFoodsOfAUserWithNullEmail() {
+        try {
+            services.getFoodsOfAUser(null);
+            fail("Debió fallar al consultar los alimentos de un usuario con nombre nulo");
+        } catch (ServiceException e) {
+            assertEquals(ServiceException.NULL_USERNAME, e.getMessage());
         }
     }
 
@@ -117,6 +169,16 @@ public class ServicesTests {
             fail("Debió fallar al intentar eliminar un alimento de un usuario que no existe");
         } catch (ServiceException e) {
             assertEquals("No existe un usuario con el nombre " + email, e.getMessage());
+        }
+    }
+
+    @Test
+    public void shouldNotDeleteAFoodOfAUserWithNullEmail() {
+        try {
+            services.deleteFood(0, null);
+            fail("Debió fallar al intentar eliminar un alimento de un usuario con nombre nulo");
+        } catch (ServiceException e) {
+            assertEquals(ServiceException.NULL_USERNAME, e.getMessage());
         }
     }
 
