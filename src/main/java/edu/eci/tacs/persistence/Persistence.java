@@ -6,7 +6,7 @@ import edu.eci.tacs.model.User;
 import java.util.List;
 
 public interface Persistence {
-    void addUser(User user);
+    void addUser(User user) throws PersistenceException;
 
     User getUser(String username) throws PersistenceException;
 

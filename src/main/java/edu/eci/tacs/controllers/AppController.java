@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -74,17 +75,26 @@ public class AppController {
     public ResponseEntity<?> addUser(@RequestBody CreateUser createUser) {
         User user = new User(createUser.getUsername(), createUser.getPassword());
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        services.addUser(user);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        try {
+            services.addUser(user);
+            return new ResponseEntity<>(HttpStatus.CREATED);
+        } catch (ServiceException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
+        }
     }
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody CreateUser user) {
-        UserDetails userDetails = userDetailsService.loadUserByUsername(user.getUsername());
-        if (userDetails != null && new BCryptPasswordEncoder().matches(user.getPassword(), userDetails.getPassword())) {
-            return new ResponseEntity<>(HttpStatus.OK);
+        UserDetails userDetails;
+        try {
+            userDetails = userDetailsService.loadUserByUsername(user.getUsername());
+        } catch (UsernameNotFoundException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        }
+        if (passwordEncoder.matches(user.getPassword(), userDetails.getPassword())) {
+            return new ResponseEntity<>("Login Exitoso", HttpStatus.OK);
         } else {
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>("Credenciales Incorrectas", HttpStatus.UNAUTHORIZED);
         }
     }
 

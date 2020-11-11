@@ -17,8 +17,12 @@ public class ServicesImpl implements Services {
 
 
     @Override
-    public void addUser(User user) {
-        persistence.addUser(user);
+    public void addUser(User user) throws ServiceException {
+        try {
+            persistence.addUser(user);
+        } catch (PersistenceException e) {
+            throw new ServiceException(e.getMessage());
+        }
     }
 
     @Override

@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface Services {
 
-    void addUser(User user);
+    void addUser(User user) throws ServiceException;
 
     User getUser(String username) throws ServiceException;
 

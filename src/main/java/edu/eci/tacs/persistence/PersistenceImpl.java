@@ -20,7 +20,11 @@ public class PersistenceImpl implements Persistence {
     private FoodRepository foodRepository;
 
     @Override
-    public void addUser(User user) {
+    public void addUser(User user) throws PersistenceException {
+        String username = user.getUsername();
+        if(userRepository.getUserByUsername(username)!=null){
+            throw new PersistenceException("Ya existe un usuario con el nombre " + username);
+        }
         userRepository.save(user);
     }
 
