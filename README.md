@@ -18,7 +18,7 @@
 
 ## Descripción
 
-  Food App es una aplicación para gestionar tu lista de mercado, de esta puedes registrar todo lo que quieras comprar desde tu celular.
+  Food App es una aplicación para gestionar tu lista de mercado, puedes registrar todo lo que quieras y para crear una cuanta solo debes tener nombre de usuario y contraseña.
 
 ## Casos de Uso
 
