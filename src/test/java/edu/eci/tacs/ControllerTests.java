@@ -52,12 +52,9 @@ public class ControllerTests {
 
     @Test
     public void shouldNotCreateAnUserWithARepeatedUsername() throws Exception {
-        CreateUser user = new CreateUser("usuarioA@gmail.com", "123");
-        mvc.perform(
-                MockMvcRequestBuilders.post("/users")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(gson.toJson(user)))
-                .andExpect(status().isCreated());
+        String email = "usuarioA@gmail.com";
+        addUser(email);
+        CreateUser user = new CreateUser(email, "123");
         MvcResult result = mvc.perform(
                 MockMvcRequestBuilders.post("/users")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -70,12 +67,8 @@ public class ControllerTests {
 
     @Test
     public void shouldNotDoLoginWithBadCredentials() throws Exception {
-        CreateUser user = new CreateUser("usuarioB@gmail.com", "123");
-        mvc.perform(
-                MockMvcRequestBuilders.post("/users")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(gson.toJson(user)))
-                .andExpect(status().isCreated());
+        String email = "usuarioB@gmail.com";
+        CreateUser user = addUser(email);
         user.setPassword("456");
         MvcResult result = mvc.perform(
                 MockMvcRequestBuilders.post("/login")
@@ -89,12 +82,8 @@ public class ControllerTests {
 
     @Test
     public void shouldDoLogin() throws Exception {
-        CreateUser user = new CreateUser("usuarioC@gmail.com", "123");
-        mvc.perform(
-                MockMvcRequestBuilders.post("/users")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(gson.toJson(user)))
-                .andExpect(status().isCreated());
+        String email = "usuarioC@gmail.com";
+        CreateUser user = addUser(email);
         MvcResult result = mvc.perform(
                 MockMvcRequestBuilders.post("/login")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -121,12 +110,7 @@ public class ControllerTests {
     @Test
     public void shouldGetAUser() throws Exception {
         String email = "usuarioD@gmail.com";
-        CreateUser user = new CreateUser(email, "123");
-        mvc.perform(
-                MockMvcRequestBuilders.post("/users")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(gson.toJson(user)))
-                .andExpect(status().isCreated());
+        addUser(email);
         MvcResult result = mvc.perform(
                 MockMvcRequestBuilders.get("/users/" + email)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -169,18 +153,8 @@ public class ControllerTests {
     @Test
     public void shouldAddAndGetFood() throws Exception {
         String email = "usuarioE@gmail.com";
-        CreateUser user = new CreateUser(email, "123");
-        mvc.perform(
-                MockMvcRequestBuilders.post("/users")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(gson.toJson(user)))
-                .andExpect(status().isCreated());
-        CreateFood food = new CreateFood("Pizza");
-        mvc.perform(
-                MockMvcRequestBuilders.post("/foods").header("x-userName", email)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(gson.toJson(food)))
-                .andExpect(status().isCreated());
+        addUser(email);
+        CreateFood food = addFood(email);
         MvcResult result = mvc.perform(
                 MockMvcRequestBuilders.get("/foods/" + email)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -211,37 +185,18 @@ public class ControllerTests {
     @Test
     public void shouldNotDeleteAFoodOfAnotherUser() throws Exception {
         String email = "usuarioG@gmail.com";
-        CreateUser user = new CreateUser(email, "123");
-        CreateUser user2 = new CreateUser("usuarioG2@gmail.com", "123");
-        mvc.perform(
-                MockMvcRequestBuilders.post("/users")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(gson.toJson(user)))
-                .andExpect(status().isCreated());
-        mvc.perform(
-                MockMvcRequestBuilders.post("/users")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(gson.toJson(user2)))
-                .andExpect(status().isCreated());
-        CreateFood food = new CreateFood("Pizza");
-        mvc.perform(
-                MockMvcRequestBuilders.post("/foods").header("x-userName", email)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(gson.toJson(food)))
-                .andExpect(status().isCreated());
-        MvcResult result = mvc.perform(
-                MockMvcRequestBuilders.get("/foods/" + email)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(""))
-                .andExpect(status().isAccepted())
-                .andReturn();
+        String email2 = "usuarioG2@gmail.com";
+        addUser(email);
+        addUser(email2);
+        addFood(email);
+        MvcResult result = getFoods(email);
         String bodyResult = result.getResponse().getContentAsString();
         JSONArray array = new JSONArray(bodyResult);
         assertEquals(1, array.length());
         GetFood returnedFood = gson.fromJson(array.getJSONObject(0).toString(), GetFood.class);
         long foodId = returnedFood.getId();
         result = mvc.perform(
-                MockMvcRequestBuilders.delete("/foods/" + foodId).header("x-userName", "usuarioG2@gmail.com")
+                MockMvcRequestBuilders.delete("/foods/" + foodId).header("x-userName", email2)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(""))
                 .andExpect(status().isUnauthorized())
@@ -253,24 +208,9 @@ public class ControllerTests {
     @Test
     public void shouldDeleteOneFood() throws Exception {
         String email = "usuarioF@gmail.com";
-        CreateUser user = new CreateUser(email, "123");
-        mvc.perform(
-                MockMvcRequestBuilders.post("/users")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(gson.toJson(user)))
-                .andExpect(status().isCreated());
-        CreateFood food = new CreateFood("Pizza");
-        mvc.perform(
-                MockMvcRequestBuilders.post("/foods").header("x-userName", email)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(gson.toJson(food)))
-                .andExpect(status().isCreated());
-        MvcResult result = mvc.perform(
-                MockMvcRequestBuilders.get("/foods/" + email)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(""))
-                .andExpect(status().isAccepted())
-                .andReturn();
+        addUser(email);
+        addFood(email);
+        MvcResult result = getFoods(email);
         String bodyResult = result.getResponse().getContentAsString();
         JSONArray array = new JSONArray(bodyResult);
         assertEquals(1, array.length());
@@ -281,14 +221,38 @@ public class ControllerTests {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(""))
                 .andExpect(status().isAccepted());
-        result = mvc.perform(
+        result = getFoods(email);
+        bodyResult = result.getResponse().getContentAsString();
+        array = new JSONArray(bodyResult);
+        assertEquals(0, array.length());
+    }
+
+    private CreateUser addUser(String email) throws Exception {
+        CreateUser user = new CreateUser(email, "123");
+        mvc.perform(
+                MockMvcRequestBuilders.post("/users")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(gson.toJson(user)))
+                .andExpect(status().isCreated());
+        return user;
+    }
+
+    private CreateFood addFood(String email) throws Exception {
+        CreateFood food = new CreateFood("Pizza");
+        mvc.perform(
+                MockMvcRequestBuilders.post("/foods").header("x-userName", email)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(gson.toJson(food)))
+                .andExpect(status().isCreated());
+        return food;
+    }
+
+    private MvcResult getFoods(String email) throws Exception {
+        return mvc.perform(
                 MockMvcRequestBuilders.get("/foods/" + email)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(""))
                 .andExpect(status().isAccepted())
                 .andReturn();
-        bodyResult = result.getResponse().getContentAsString();
-        array = new JSONArray(bodyResult);
-        assertEquals(0, array.length());
     }
 }

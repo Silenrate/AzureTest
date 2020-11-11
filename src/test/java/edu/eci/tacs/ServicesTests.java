@@ -40,12 +40,7 @@ public class ServicesTests {
     @Test
     public void shouldNotCreateAnUserWithARepeatedUsername() {
         String email = "clienteA@gmail.com";
-        User user = new User(email, "123");
-        try {
-            services.addUser(user);
-        } catch (ServiceException e) {
-            fail("No debió fallar al agregar este usuario");
-        }
+        User user = addUser(email);
         try {
             services.addUser(user);
             fail("Debió fallar al agregar este usuario");
@@ -78,12 +73,7 @@ public class ServicesTests {
     @Test
     public void shouldGetAUser() throws ServiceException {
         String email = "clienteB@gmail.com";
-        User user = new User(email, "123");
-        try {
-            services.addUser(user);
-        } catch (ServiceException e) {
-            fail("No debió fallar al agregar este usuario");
-        }
+        addUser(email);
         User returnedUser = services.getUser(email);
         assertEquals(email, returnedUser.getUsername());
         assertTrue(returnedUser.getId() > 0);
@@ -147,12 +137,7 @@ public class ServicesTests {
     @Test
     public void shouldAddAndGetFood() throws ServiceException {
         String email = "clienteC@gmail.com";
-        User user = new User(email, "123");
-        try {
-            services.addUser(user);
-        } catch (ServiceException e) {
-            fail("No debió fallar al agregar este usuario");
-        }
+        addUser(email);
         Food food = new Food("Pizza");
         services.addFood(food, email);
         List<Food> foodList = services.getFoodsOfAUser(email);
@@ -185,12 +170,7 @@ public class ServicesTests {
     @Test
     public void shouldNotDeleteANonExistingFood() {
         String email = "clienteE@gmail.com";
-        User user = new User(email, "123");
-        try {
-            services.addUser(user);
-        } catch (ServiceException e) {
-            fail("No debió fallar al agregar el usuario");
-        }
+        addUser(email);
         try {
             services.deleteFood(0, email);
             fail("Debió fallar al intentar eliminar un alimento que no existe");
@@ -202,26 +182,15 @@ public class ServicesTests {
     @Test
     public void shouldNotDeleteAFoodOfAnotherUser() {
         String email = "clienteF@gmail.com";
-        User user = new User(email, "123");
-        User user2 = new User("clienteF2@gmail.com", "123");
-        Food food = new Food("Pizza");
-        try {
-            services.addUser(user);
-            services.addUser(user2);
-            services.addFood(food, email);
-        } catch (ServiceException e) {
-            fail("No debió fallar al agregar los usuarios ni el alimento");
-        }
-        List<Food> foodList = null;
-        try {
-            foodList = services.getFoodsOfAUser(email);
-        } catch (ServiceException e) {
-            fail("No debió fallar al consultar los alimentos de ese usuario");
-        }
+        String email2 = "clienteF2@gmail.com";
+        addUser(email);
+        addUser(email2);
+        addFood(email);
+        List<Food> foodList = getFoods(email);
         assertEquals(1, foodList.size());
         Food returnedFood = foodList.get(0);
         try {
-            services.deleteFood(returnedFood.getId(), "clienteF2@gmail.com");
+            services.deleteFood(returnedFood.getId(), email2);
             fail("Debió fallar al intentar eliminar un alimento que no es suyo");
         } catch (ServiceException e) {
             assertEquals("Este usuario no tiene permiso de eliminar este alimento", e.getMessage());
@@ -231,19 +200,42 @@ public class ServicesTests {
     @Test
     public void shouldDeleteOneFood() throws ServiceException {
         String email = "clienteD@gmail.com";
-        User user = new User(email, "123");
-        Food food = new Food("Pizza");
-        try {
-            services.addUser(user);
-            services.addFood(food, email);
-        } catch (ServiceException e) {
-            fail("No debió fallar al agregar el usuario ni el alimento");
-        }
-        List<Food> foodList = services.getFoodsOfAUser(email);
+        addUser(email);
+        addFood(email);
+        List<Food> foodList = getFoods(email);
         assertEquals(1, foodList.size());
         Food returnedFood = foodList.get(0);
         services.deleteFood(returnedFood.getId(), email);
         List<Food> newFoodList = services.getFoodsOfAUser(email);
         assertEquals(0, newFoodList.size());
+    }
+
+    private User addUser(String email) {
+        User user = new User(email, "123");
+        try {
+            services.addUser(user);
+        } catch (ServiceException e) {
+            fail("No debió fallar al agregar el usuario");
+        }
+        return user;
+    }
+
+    private void addFood(String email) {
+        Food food = new Food("Pizza");
+        try {
+            services.addFood(food, email);
+        } catch (ServiceException e) {
+            fail("No debió fallar al agregar el alimento");
+        }
+    }
+
+    private List<Food> getFoods(String email) {
+        List<Food> foods = null;
+        try {
+            foods = services.getFoodsOfAUser(email);
+        } catch (ServiceException e) {
+            fail("No debió fallar al consultar los alimentos de un usuario");
+        }
+        return foods;
     }
 }
