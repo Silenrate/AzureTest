@@ -103,7 +103,11 @@ public class AppController {
             services.deleteFood(foodId, username);
             return new ResponseEntity<>(HttpStatus.ACCEPTED);
         } catch (ServiceException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+            if (e.getMessage().equals("Este usuario no tiene permiso de eliminar este alimento")) {
+                return new ResponseEntity<>(e.getMessage(), HttpStatus.UNAUTHORIZED);
+            } else {
+                return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+            }
         }
     }
 

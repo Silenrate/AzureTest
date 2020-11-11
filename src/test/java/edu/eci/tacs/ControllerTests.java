@@ -209,6 +209,48 @@ public class ControllerTests {
     }
 
     @Test
+    public void shouldNotDeleteAFoodOfAnotherUser() throws Exception {
+        String email = "usuarioG@gmail.com";
+        CreateUser user = new CreateUser(email, "123");
+        CreateUser user2 = new CreateUser("usuarioG2@gmail.com", "123");
+        mvc.perform(
+                MockMvcRequestBuilders.post("/users")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(gson.toJson(user)))
+                .andExpect(status().isCreated());
+        mvc.perform(
+                MockMvcRequestBuilders.post("/users")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(gson.toJson(user2)))
+                .andExpect(status().isCreated());
+        CreateFood food = new CreateFood("Pizza");
+        mvc.perform(
+                MockMvcRequestBuilders.post("/foods").header("x-userName", email)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(gson.toJson(food)))
+                .andExpect(status().isCreated());
+        MvcResult result = mvc.perform(
+                MockMvcRequestBuilders.get("/foods/" + email)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(""))
+                .andExpect(status().isAccepted())
+                .andReturn();
+        String bodyResult = result.getResponse().getContentAsString();
+        JSONArray array = new JSONArray(bodyResult);
+        assertEquals(1, array.length());
+        GetFood returnedFood = gson.fromJson(array.getJSONObject(0).toString(), GetFood.class);
+        long foodId = returnedFood.getId();
+        result = mvc.perform(
+                MockMvcRequestBuilders.delete("/foods/" + foodId).header("x-userName", "usuarioG2@gmail.com")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(""))
+                .andExpect(status().isUnauthorized())
+                .andReturn();
+        bodyResult = result.getResponse().getContentAsString();
+        assertEquals("Este usuario no tiene permiso de eliminar este alimento", bodyResult);
+    }
+
+    @Test
     public void shouldDeleteOneFood() throws Exception {
         String email = "usuarioF@gmail.com";
         CreateUser user = new CreateUser(email, "123");
