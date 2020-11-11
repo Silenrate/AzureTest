@@ -39,6 +39,8 @@ jacocoTestReport {
     afterEvaluate {
         getClassDirectories().setFrom(classDirectories.files.collect {
             fileTree(dir: it, exclude: ['**/edu/eci/tacs/model/**',
+                                        '**/edu/eci/tacs/security/**',
+                                        '**/edu/eci/tacs/controllers/dtos/**',
                                         '**/edu/eci/tacs/TACSApp**'])
         })
     }
