@@ -9,6 +9,10 @@ public class CreateFood implements Serializable {
     public CreateFood() {
     }
 
+    public CreateFood(String name) {
+        this.name = name;
+    }
+
     public String getName() {
         return name;
     }

@@ -1,8 +1,11 @@
 package edu.eci.tacs;
 
 import com.google.gson.Gson;
+import edu.eci.tacs.controllers.dtos.CreateFood;
 import edu.eci.tacs.controllers.dtos.CreateUser;
+import edu.eci.tacs.controllers.dtos.GetFood;
 import edu.eci.tacs.controllers.dtos.GetUser;
+import org.json.JSONArray;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -136,4 +139,114 @@ public class ControllerTests {
         assertTrue(returnedUser.getId() > 0);
     }
 
+    @Test
+    public void shouldNotAddFoodToANonExistingUser() throws Exception {
+        String email = "noexiste@gmail.com";
+        CreateFood food = new CreateFood("Pizza");
+        MvcResult result = mvc.perform(
+                MockMvcRequestBuilders.post("/foods").header("x-userName", email)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(gson.toJson(food)))
+                .andExpect(status().isConflict())
+                .andReturn();
+        String bodyResult = result.getResponse().getContentAsString();
+        assertEquals("No existe un usuario con el nombre " + email, bodyResult);
+    }
+
+    @Test
+    public void shouldNotGetTheFoodsOfANonExistingUser() throws Exception {
+        String email = "noexiste@gmail.com";
+        MvcResult result = mvc.perform(
+                MockMvcRequestBuilders.get("/foods/" + email)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(""))
+                .andExpect(status().isNotFound())
+                .andReturn();
+        String bodyResult = result.getResponse().getContentAsString();
+        assertEquals("No existe un usuario con el nombre " + email, bodyResult);
+    }
+
+    @Test
+    public void shouldAddAndGetFood() throws Exception {
+        String email = "usuarioE@gmail.com";
+        CreateUser user = new CreateUser(email, "123");
+        mvc.perform(
+                MockMvcRequestBuilders.post("/users")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(gson.toJson(user)))
+                .andExpect(status().isCreated());
+        CreateFood food = new CreateFood("Pizza");
+        mvc.perform(
+                MockMvcRequestBuilders.post("/foods").header("x-userName", email)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(gson.toJson(food)))
+                .andExpect(status().isCreated());
+        MvcResult result = mvc.perform(
+                MockMvcRequestBuilders.get("/foods/" + email)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(""))
+                .andExpect(status().isAccepted())
+                .andReturn();
+        String bodyResult = result.getResponse().getContentAsString();
+        JSONArray array = new JSONArray(bodyResult);
+        assertEquals(1, array.length());
+        GetFood returnedFood = gson.fromJson(array.getJSONObject(0).toString(), GetFood.class);
+        assertEquals(food.getName(), returnedFood.getName());
+        assertEquals(email, returnedFood.getUser().getUsername());
+    }
+
+    @Test
+    public void shouldNotDeleteAFoodOfANonExistingUser() throws Exception {
+        String email = "noexiste@gmail.com";
+        MvcResult result = mvc.perform(
+                MockMvcRequestBuilders.delete("/foods/0").header("x-userName", email)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(""))
+                .andExpect(status().isNotFound())
+                .andReturn();
+        String bodyResult = result.getResponse().getContentAsString();
+        assertEquals("No existe un usuario con el nombre " + email, bodyResult);
+    }
+
+    @Test
+    public void shouldNotDeleteOneFood() throws Exception {
+        String email = "usuarioF@gmail.com";
+        CreateUser user = new CreateUser(email, "123");
+        mvc.perform(
+                MockMvcRequestBuilders.post("/users")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(gson.toJson(user)))
+                .andExpect(status().isCreated());
+        CreateFood food = new CreateFood("Pizza");
+        mvc.perform(
+                MockMvcRequestBuilders.post("/foods").header("x-userName", email)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(gson.toJson(food)))
+                .andExpect(status().isCreated());
+        MvcResult result = mvc.perform(
+                MockMvcRequestBuilders.get("/foods/" + email)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(""))
+                .andExpect(status().isAccepted())
+                .andReturn();
+        String bodyResult = result.getResponse().getContentAsString();
+        JSONArray array = new JSONArray(bodyResult);
+        assertEquals(1, array.length());
+        GetFood returnedFood = gson.fromJson(array.getJSONObject(0).toString(), GetFood.class);
+        long foodId = returnedFood.getId();
+        mvc.perform(
+                MockMvcRequestBuilders.delete("/foods/" + foodId).header("x-userName", email)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(""))
+                .andExpect(status().isAccepted());
+        result = mvc.perform(
+                MockMvcRequestBuilders.get("/foods/" + email)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(""))
+                .andExpect(status().isAccepted())
+                .andReturn();
+        bodyResult = result.getResponse().getContentAsString();
+        array = new JSONArray(bodyResult);
+        assertEquals(0, array.length());
+    }
 }
