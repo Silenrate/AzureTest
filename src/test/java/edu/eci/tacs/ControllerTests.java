@@ -54,7 +54,7 @@ public class ControllerTests {
     public void shouldNotCreateAnUserWithARepeatedUsername() throws Exception {
         String email = "usuarioA@gmail.com";
         addUser(email);
-        CreateUser user = new CreateUser(email, "123");
+        CreateUser user = new CreateUser(email, "Password123@");
         MvcResult result = mvc.perform(
                 MockMvcRequestBuilders.post("/users")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -228,7 +228,7 @@ public class ControllerTests {
     }
 
     private CreateUser addUser(String email) throws Exception {
-        CreateUser user = new CreateUser(email, "123");
+        CreateUser user = new CreateUser(email, "Password123@");
         mvc.perform(
                 MockMvcRequestBuilders.post("/users")
                         .contentType(MediaType.APPLICATION_JSON)
