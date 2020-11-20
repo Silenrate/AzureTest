@@ -31,14 +31,30 @@
                             <input type="text" name="name" id="name_signup" placeholder="Username" required />
                         </div>
 
-                        <div class="form-group">
+                        <div class="form-group" style = "display: inline-block;">
                             <label for="pass"><i class="zmdi zmdi-lock"></i></label>
                             <input type="password" name="pass" id="pass" placeholder="Password" required/>
                         </div>
-
+                        <div id="statusPassword" style = "display: inline-block;"></div>
+                        <br/>
+                        <input type="checkbox" onclick="signupModule().showPassword()"> Show Password
+                        <br></br>
                         <div class="form-group">
                             <button type="button" class="btn btn-primary" onclick="signupModule().createUser()">Create user</button>
                         </div>
+                        
+                        <script type="text/javascript">
+                            var regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])([A-Za-z\d$@$!%*?&]|[^ ]){8,40}$/;
+                            $("#pass").on("input",function(){
+                                if(regex.test($(this).val())){
+                                    $("#statusPassword").text("Strong Password");
+                                    $("#statusPassword").css("color","green");
+                                }else{
+                                    $("#statusPassword").text("Weak Password");
+                                    $("#statusPassword").css("color","red");
+                                }
+                            });
+                        </script>	
 
                         <script>
                             $('#pass').keypress(function(e) {

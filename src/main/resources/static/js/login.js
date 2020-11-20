@@ -4,7 +4,7 @@ var loginModule = (function () {
     LOCAL http://localhost:8080
     PRODUCTION https://foodapitacs.herokuapp.com
     */
-    const url = "https://foodapitacs.herokuapp.com";
+    const url = "http://localhost:8080";
 
     function doLogin(){
         var email = $("#username").val();
@@ -23,6 +23,15 @@ var loginModule = (function () {
         });
     }
 
+    function showPassword() {
+        var x = document.getElementById("password");
+        if (x.type === "password") {
+          x.type = "text";
+        } else {
+          x.type = "password";
+        }
+    }
+
     function doLogout(){
         localStorage.clear();
         window.location.href=url+"/login.html";
@@ -30,6 +39,7 @@ var loginModule = (function () {
 
     return {
         doLogin:doLogin,
-        doLogout:doLogout
+        doLogout:doLogout,
+        showPassword: showPassword
     };
 });

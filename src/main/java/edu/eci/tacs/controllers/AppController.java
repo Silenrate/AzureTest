@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.regex.Pattern;
 
 @RestController
 public class AppController {
@@ -62,6 +63,10 @@ public class AppController {
 
     @PostMapping("/foods")
     public ResponseEntity<?> addFood(@RequestBody CreateFood food, @RequestHeader("x-userName") String username) {
+        System.out.println("FOOD");
+        System.out.println(food.toString());
+        System.out.println("username");
+        System.out.println(username);
         try {
             services.addFood(new Food(food.getName()), username);
             return new ResponseEntity<>(HttpStatus.CREATED);
@@ -72,6 +77,12 @@ public class AppController {
 
     @PostMapping("/users")
     public ResponseEntity<?> addUser(@RequestBody CreateUser createUser) {
+        String stringPattern = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=!*])(?=\\S+$).{8,}$";
+        Pattern pattern = Pattern.compile(stringPattern);
+        boolean validPassword = pattern.matcher(createUser.getPassword()).matches();
+        if (!validPassword){
+            return new ResponseEntity<>("The password doesn't have the required security parameters!", HttpStatus.BAD_REQUEST);
+        }
         User user = new User(createUser.getUsername(), createUser.getPassword());
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         try {

@@ -39,7 +39,9 @@
                             <label for="password"><i class="zmdi zmdi-lock"></i></label>
                             <input type="password" name="your_pass" id="password" placeholder="Password" required/>
                         </div>
-
+                        
+                        <input type="checkbox" onclick="loginModule().showPassword()"> Show Password
+                        <br></br>
 
                         <div class="form-group" >
                             <button id="sign_in" type="button" class="btn btn-primary" onclick="loginModule().doLogin()" >Login</button>

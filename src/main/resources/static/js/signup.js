@@ -4,7 +4,7 @@ var signupModule = (function () {
     LOCAL http://localhost:8080
     PRODUCTION https://foodapitacs.herokuapp.com
     */
-    const url = "https://foodapitacs.herokuapp.com";
+    const url = "http://localhost:8080";
 
     function alertError(message){
         Swal.fire({
@@ -23,7 +23,26 @@ var signupModule = (function () {
             bool = false;
             alertError("The password cannot be empty");
         }
+        bool = validatePassword(bool, password);
         return bool;
+    }
+
+    function validatePassword(bool, password) {
+        var regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])([A-Za-z\d$@$!%*?&]|[^ ]){8,40}$/;
+        if (bool && !regex.test(password) ) {
+            alertError("The password is weak. It must have a capital letter, a minimum length of 8, numbers and symbols like $@$!%*?&");
+            bool = false;
+        }
+        return bool;        
+    }
+
+    function showPassword() {
+        var x = document.getElementById("pass");
+        if (x.type === "password") {
+          x.type = "text";
+        } else {
+          x.type = "password";
+        }
     }
 
     function createUser(){
@@ -63,6 +82,7 @@ var signupModule = (function () {
     }
 
     return {
-        createUser:createUser
+        createUser:createUser,
+        showPassword: showPassword
     };
 });
