@@ -4,7 +4,7 @@ var signupModule = (function () {
     LOCAL http://localhost:8080
     PRODUCTION https://foodapitacs.herokuapp.com
     */
-    const url = "http://localhost:8080";
+    const url = "https://foodapitacs.herokuapp.com";
 
     function alertError(message){
         Swal.fire({
