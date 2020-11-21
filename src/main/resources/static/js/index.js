@@ -54,16 +54,25 @@ var indexModule = (function () {
     function postFood(){
         var name = document.getElementById("new_name").value;
         var food = {"name":name};
-        apiclient().postFood(food,localStorage.getItem("x-userName"))
-            .then(function(data, textStatus, request) {
-                location.reload();
-            }).catch( (e) => {
-                Swal.fire({
-                    icon: "error",
-                    title: "Oops...",
-                    text: "Error al insertar "+name
+        if(name === ""){
+            Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "Error al insertar "+name
+
             });
-        });
+        }else{
+            apiclient().postFood(food,localStorage.getItem("x-userName"))
+                .then(function(data, textStatus, request) {
+                    location.reload();
+                }).catch( (e) => {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Oops...",
+                        text: "Error al insertar "+name
+                });
+            });
+        }
     }
 
     function deleteFood(foodId){
