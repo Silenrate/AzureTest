@@ -66,6 +66,20 @@ public class ControllerTests {
     }
 
     @Test
+    public void shouldNotCreateAnUserWithAWeakPassword() throws Exception {
+        String email = "usuarioG@gmail.com";
+        CreateUser user = new CreateUser(email, "12345");
+        MvcResult result = mvc.perform(
+                MockMvcRequestBuilders.post("/users")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(gson.toJson(user)))
+                .andExpect(status().isBadRequest())
+                .andReturn();
+        String bodyResult = result.getResponse().getContentAsString();
+        assertEquals("The password doesn't have the required security parameters!", bodyResult);
+    }
+
+    @Test
     public void shouldNotDoLoginWithBadCredentials() throws Exception {
         String email = "usuarioB@gmail.com";
         CreateUser user = addUser(email);
