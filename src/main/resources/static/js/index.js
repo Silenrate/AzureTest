@@ -4,7 +4,7 @@ var indexModule = (function () {
     LOCAL http://localhost:8080
     PRODUCTION https://foodapitacs.herokuapp.com
     */
-    const url = "https://foodapitacs.herokuapp.com";
+    const url = "https://arep-foodapp.herokuapp.com";
 
     function loadData(data){
         if(data.length===0){

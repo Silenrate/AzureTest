@@ -4,7 +4,7 @@ var apiclient = (function () {
     LOCAL http://localhost:8080
     PRODUCTION https://foodapitacs.herokuapp.com
     */
-    const urlAPI = "https://foodapitacs.herokuapp.com";
+    const urlAPI = "https://arep-foodapp.herokuapp.com";
 
     function postLogin(loginRequest){
         var data = $.ajax({

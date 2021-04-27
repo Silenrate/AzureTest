@@ -4,7 +4,7 @@ var loginModule = (function () {
     LOCAL http://localhost:8080
     PRODUCTION https://foodapitacs.herokuapp.com
     */
-    const url = "https://foodapitacs.herokuapp.com";
+    const url = "https://arep-foodapp.herokuapp.com";
 
     function doLogin(){
         var email = $("#username").val();
